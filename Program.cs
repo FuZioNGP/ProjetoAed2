@@ -22,17 +22,17 @@ namespace Discord.app
 
         public async Task MainAsync()
 		{
-                _client = new DiscordSocketClient();
-                _commands = new CommandService();
+            _client = new DiscordSocketClient();
+            _commands = new CommandService();
 
-                _client.Log += Log;
+            _client.Log += Log;
 
-                var token = "ODIyOTgzMzU4OTc1NzA1MTE5.YFaM-w.Us8v9__0qjZg4qdw9p2khQ5CASM";
-                await Client_Ready();
-                await InstallCommandsAsync();
-
-                await _client.LoginAsync(TokenType.Bot, token);
-                await _client.StartAsync();
+            var token = "ODIyOTgzMzU4OTc1NzA1MTE5.YFaM-w.Us8v9__0qjZg4qdw9p2khQ5CASM";
+            await Client_Ready();
+            await InstallCommandsAsync();
+            _commands.CommandExecuted += CommandExecutedAsync;
+            await _client.LoginAsync(TokenType.Bot, token);
+            await _client.StartAsync();
                
 
             // Block this task until the program is closed.
@@ -64,6 +64,7 @@ namespace Discord.app
                 context: context,
                 argPos: argPos,
                 services: null);
+
         }
 
 
@@ -72,7 +73,8 @@ namespace Discord.app
             // if a command isn't found, log that info to console and exit this method
             if (!command.IsSpecified)
             {
-                System.Console.WriteLine($"Command failed to execute for [{context.User.Username}] <-> [{result.ErrorReason}]!");
+                System.Console.WriteLine($"Command failed to execute for [{context.User.Username}] <-> [Comando inexistente]!");
+                await context.Channel.SendMessageAsync($"Desculpe, {context.User.Username}... não foi possivel executar seu comando -> [Comando não existe!]!");
                 return;
             }
 
@@ -86,7 +88,7 @@ namespace Discord.app
 
 
             // failure scenario, let's let the user know
-            await context.Channel.SendMessageAsync($"Sorry, {context.User.Username}... something went wrong -> [{result}]!");
+            await context.Channel.SendMessageAsync($"Desculpe, {context.User.Username}... Não foi possivel executar seu comando -> [{result}]!");
         }
     }
 }

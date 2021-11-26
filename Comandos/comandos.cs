@@ -25,14 +25,14 @@ namespace Discord.app.Comandos
             var user = Context.User;
 
             // build out the reply
-            sb.AppendLine($"You are -> []");
-            sb.AppendLine("I must now say, World!");
+            sb.AppendLine($"Seu nick é -> " + user);
+            sb.AppendLine("Você é o mais viado desse server!");
 
             // send simple string reply
             await ReplyAsync(sb.ToString());
         }
 
-        [Command("8ball")]
+        [Command("perguntar")]
         [Alias("ask")]
         [RequireUserPermission(GuildPermission.KickMembers)]
         public async Task AskEightBall([Remainder] string args = null)
@@ -46,25 +46,25 @@ namespace Discord.app.Comandos
             var replies = new List<string>();
 
             // add our possible replies
-            replies.Add("yes");
-            replies.Add("no");
-            replies.Add("maybe");
-            replies.Add("hazzzzy....");
+            replies.Add("sim");
+            replies.Add("não");
+            replies.Add("obvio");
+            replies.Add("talvez....");
 
             // time to add some options to the embed (like color and title)
             embed.WithColor(new Color(0, 255, 0));
-            embed.Title = "Welcome to the 8-ball!";
+            embed.Title = "Bem vindo ao Pergunte para o BOT!";
 
             // we can get lots of information from the Context that is passed into the commands
             // here I'm setting up the preface with the user's name and a comma
-            sb.AppendLine($",");
+            sb.AppendLine($"");
             sb.AppendLine();
 
             // let's make sure the supplied question isn't null 
             if (args == null)
             {
                 // if no question is asked (args are null), reply with the below text
-                sb.AppendLine("Sorry, can't answer a question you didn't ask!");
+                sb.AppendLine("Desculpe mas você não fez uma pergunta!");
             }
             else
             {
@@ -73,29 +73,29 @@ namespace Discord.app.Comandos
                 var answer = replies[new Random().Next(replies.Count - 1)];
 
                 // build out our reply with the handy StringBuilder
-                sb.AppendLine($"You asked: [****]...");
+                sb.AppendLine($"Você perguntou: " + args);
                 sb.AppendLine();
-                sb.AppendLine($"...your answer is [****]");
+                sb.AppendLine($"resposta: "+ answer);
 
                 // bonus - let's switch out the reply and change the color based on it
                 switch (answer)
                 {
-                    case "yes":
+                    case "sim":
                         {
                             embed.WithColor(new Color(0, 255, 0));
                             break;
                         }
-                    case "no":
+                    case "não":
                         {
                             embed.WithColor(new Color(255, 0, 0));
                             break;
                         }
-                    case "maybe":
+                    case "obvio":
                         {
                             embed.WithColor(new Color(255, 255, 0));
                             break;
                         }
-                    case "hazzzzy....":
+                    case "talvez....":
                         {
                             embed.WithColor(new Color(255, 0, 255));
                             break;
