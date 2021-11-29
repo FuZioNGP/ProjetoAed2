@@ -8,11 +8,12 @@ using System.Collections.Generic;
 namespace Discord.app.Comandos
 {
     // for commands to be available, and have the Context passed to them, we must inherit ModuleBase
-    public class ExampleCommands : ModuleBase
+    public class PlayersCommands : ModuleBase
     {
+
         [Command("say")]
-        [Summary("Echoes a message.")]
-        public Task SayAsync([Remainder][Summary("The text to echo")] string echo)
+        [Summary("Repete sua mensagem.")]
+        public Task SayAsync([Remainder][Summary("O texto escrito é ")] string echo)
             => ReplyAsync(echo);
 
         [Command("hello")]

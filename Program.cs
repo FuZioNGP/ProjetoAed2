@@ -10,7 +10,6 @@ namespace Discord.app
 {
 	class Program
     {
-        
         private DiscordSocketClient _client;
         private CommandService _commands;
         private Task Log(LogMessage msg)
