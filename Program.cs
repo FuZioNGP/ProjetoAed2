@@ -27,7 +27,7 @@ namespace Discord.app
 
             _client.Log += Log;
 
-            var token = "ODIyOTgzMzU4OTc1NzA1MTE5.YFaM-w.HvE5B6q-yiY0d0_IMHd2iWo7hsk";
+            var token = "Seu token";
             await Client_Ready();
             await InstallCommandsAsync();
             _commands.CommandExecuted += CommandExecutedAsync;
