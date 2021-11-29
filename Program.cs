@@ -18,7 +18,7 @@ namespace Discord.app
 			Console.WriteLine(msg.ToString());
 			return Task.CompletedTask;
 		}
-        public static void Main(string[] args) => new Program().MainAsync().GetAwaiter().GetResult();
+        static void Main(string[] args) => new Program().MainAsync().GetAwaiter().GetResult();
 
         public async Task MainAsync()
 		{
@@ -27,7 +27,7 @@ namespace Discord.app
 
             _client.Log += Log;
 
-            var token = "ODIyOTgzMzU4OTc1NzA1MTE5.YFaM-w.Us8v9__0qjZg4qdw9p2khQ5CASM";
+            var token = "ODIyOTgzMzU4OTc1NzA1MTE5.YFaM-w.HvE5B6q-yiY0d0_IMHd2iWo7hsk";
             await Client_Ready();
             await InstallCommandsAsync();
             _commands.CommandExecuted += CommandExecutedAsync;

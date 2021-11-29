@@ -26,7 +26,7 @@ namespace Discord.app.Comandos
 
             // build out the reply
             sb.AppendLine($"Seu nick é -> " + user);
-            sb.AppendLine("Você é o mais viado desse server!");
+            sb.AppendLine("Seja muito bem vindo!");
 
             // send simple string reply
             await ReplyAsync(sb.ToString());
