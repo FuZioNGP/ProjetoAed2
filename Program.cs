@@ -1,18 +1,16 @@
-﻿using Discord;
-using Discord.Commands;
+﻿using Discord.Commands;
 using Discord.WebSocket;
 using System;
-using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using Discord.app.Join;
 
 namespace Discord.app
 {
 	class Program
     {
-        private DiscordSocketClient _client;
-        private CommandService _commands;
+        public DiscordSocketClient _client;
+        public CommandService _commands;
+
 
         private Task Log(LogMessage msg)
 		{
@@ -26,13 +24,17 @@ namespace Discord.app
             _client = new DiscordSocketClient();
             _commands = new CommandService();
 
-            _client.Log += Log;
-            _client.UserJoined += AnnounceJoinedUser;
-            var token = "ODIyOTgzMzU4OTc1NzA1MTE5.YFaM-w.45Iu9UOrpuu45b9Bn6xPH_bQoys";
             await Client_Ready();
             await InstallCommandsAsync();
+
+            _client.Log += Log;
+            _client.UserJoined += AnnounceJoinedUser;
+            //_client.UserBanned += AnnounceBannedUser;
+            _client.UserLeft += AnnounceLeftUser;
             _commands.CommandExecuted += CommandExecutedAsync;
+
             
+            var token = "ODIyOTgzMzU4OTc1NzA1MTE5.YFaM-w.45Iu9UOrpuu45b9Bn6xPH_bQoys";
             await _client.LoginAsync(TokenType.Bot, token);
             await _client.StartAsync();
                
@@ -40,6 +42,46 @@ namespace Discord.app
             // Block this task until the program is closed.
             await Task.Delay(-1);
           
+        }
+        public async Task AnnounceLeftUser(SocketGuildUser user)
+        {
+            var channel = _client.GetChannel(912747154966196284) as SocketTextChannel;
+            var embed = new EmbedBuilder
+            {
+                Title = "Saiu do Servidor :'(",
+                Description = $"Até mais {user.Mention}, esperamos que tenha se divertido"
+            };
+
+            embed.WithColor(new Color(255, 0, 0));
+            embed.WithFooter(footer => footer.Text = $"Id do usuário: {user.Id}");
+            embed.WithCurrentTimestamp();
+            embed.WithAuthor(user);
+            embed.WithThumbnailUrl(user.GetAvatarUrl());
+
+            await channel.SendMessageAsync("", false, embed.Build());
+        }
+        /*private async Task AnnounceBannedUser(SocketUser user)
+        {
+            var channel = _client.GetChannel(912747154966196284) as SocketTextChannel; // Gets the channel to send the message i
+            await channel.SendMessageAsync($"Usuario banido {user.Mention}"); //Welcomes the new user
+        }*/
+
+        public async Task AnnounceJoinedUser(SocketGuildUser user)
+        {
+            var channel = _client.GetChannel(912747154966196284) as SocketTextChannel;
+            var embed = new EmbedBuilder
+            {
+                Title = "Entrou no Servidor :)",
+                Description = $"Seja bem vindo ao Servidor War em Los Santos {user.Mention}"
+            };
+
+            embed.WithColor(new Color(0, 255, 0));
+            embed.WithFooter(footer => footer.Text = $"Id do usuário: {user.Id}");
+            embed.WithCurrentTimestamp();
+            embed.WithAuthor(user);
+            embed.WithThumbnailUrl(user.GetAvatarUrl());
+
+            await channel.SendMessageAsync("", false, embed.Build());
         }
         private async Task Client_Ready()
         {
@@ -67,12 +109,6 @@ namespace Discord.app
                 argPos: argPos,
                 services: null);
 
-        }
-        public async Task AnnounceJoinedUser(SocketGuildUser user)
-        {
-            System.Console.WriteLine($"aqui passou emmmm!");
-            var channel = _client.GetChannel(912747154966196284) as SocketTextChannel; // Gets the channel to send the message i
-            await channel.SendMessageAsync($"Seja Bem vindo {user.Mention}"); //Welcomes the new user
         }
 
         public async Task CommandExecutedAsync(Optional<CommandInfo> command, ICommandContext context, IResult result)
