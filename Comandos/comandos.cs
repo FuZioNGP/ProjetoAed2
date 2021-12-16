@@ -154,7 +154,6 @@ namespace Discord.app.Comandos
             
             var usuario = Context.User;
             bd.WithTitle("Lista de comandos");
-            bd.WithImageUrl("https://i.imgur.com/gR5PWin.png");
             bd.WithColor(Color.Blue);
 
 
@@ -219,12 +218,12 @@ namespace Discord.app.Comandos
         }
 
         [Command("avatar")]
-        public async Task eduardo(SocketUser user)
+        public async Task avatar(SocketUser user)
         {
 
             try
             {
-                var usuario = Context.User;
+                var usuario = Context.Guild.GetUser(user.Id);
                 EmbedBuilder builds = new EmbedBuilder();
                 builds.WithTitle(":camera_with_flash:Abrir a foto em uma nova guia");
                 builds.WithColor(139, 0, 139);

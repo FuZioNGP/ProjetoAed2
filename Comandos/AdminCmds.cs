@@ -9,41 +9,6 @@ namespace Discord.app.AdminCommands
 {
     public class AdminCommands : ModuleBase<SocketCommandContext>
     {
-        [Command("teste")]
-        public async Task AdminCommand()
-        {
-            var User = Context.User as SocketGuildUser;
-            var role = Context.Guild.Roles.FirstOrDefault(x => x.Name == "ADMINISTRADOR");
-
-            if (User.Roles.Contains(role))
-            {
-                var sb = new StringBuilder();
-
-                // get user info from the Context
-
-                // build out the reply
-                sb.AppendLine($"Seu nick é -> " + User);
-                sb.AppendLine("E você é administrador");
-
-                // send simple string reply
-                await ReplyAsync(sb.ToString());
-            }
-            else
-            {
-                var sb = new StringBuilder();
-
-                // get user info from the Context
-
-                // build out the reply
-                sb.AppendLine($"Seu nick é -> " + User);
-                sb.AppendLine("E você não é administrador");
-
-                // send simple string reply
-                await ReplyAsync(sb.ToString());
-            }
-            // initialize empty string builder for reply
-
-        }
         [Command("ban")]
         public async Task banirUser(SocketGuildUser name, [Remainder] string rz = "não específicado")
         {
@@ -147,7 +112,7 @@ namespace Discord.app.AdminCommands
                     builder.WithTitle("Mensagem do Servidor");
                     builder.WithColor(Color.Red);
                     builder.WithDescription("Você foi Expulso por violar as regras do servidor, caso não tenha violado entre em contato com um dos adm \n\n" +
-                        $"Você foi banido pela seguinte razão : ```{razao}```");
+                        $"Você foi expulso pela seguinte razão : ```{razao}```");
 
 
 
