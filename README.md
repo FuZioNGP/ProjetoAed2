@@ -33,6 +33,7 @@ Classe PlayerCommands onde fica os comandos voltado para players normais do serv
 
 
 "!avatar"
+
 ![e633b438-2eef-4462-a80e-a0ac754f4b3f](https://user-images.githubusercontent.com/82397670/146433554-5105e4d7-c42a-4703-90d6-d27892b43372.jpg)
 
 
