@@ -11,8 +11,6 @@ namespace Discord.app
 	public class Program
     {
         public static DiscordSocketClient _client;
-        public static CommandService _commands;
-
 
         private Task Log(LogMessage msg)
 		{
@@ -23,22 +21,24 @@ namespace Discord.app
 
         public async Task MainAsync()
 		{
-
-            _client = new DiscordSocketClient();
-            _commands = new CommandService();
-
             Config cfg = new Config();
             EntrouSaiu join = new EntrouSaiu();
 
+            _client = new DiscordSocketClient();
+            cfg._commands = new CommandService();
+
+
+
             await cfg.Client_Ready();
             await cfg.InstallCommandsAsync();
+            /*_client.MessageReceived += cfg.HandleCommandAsync;
+            await _commands.AddModulesAsync(assembly: Assembly.GetEntryAssembly(), services: null);*/
 
-            
             _client.Log += Log;
             _client.UserJoined += join.AnnounceJoinedUser;
             //_client.UserBanned += AnnounceBannedUser;
             _client.UserLeft += join.AnnounceLeftUser;
-            _commands.CommandExecuted += cfg.CommandExecutedAsync;
+            cfg._commands.CommandExecuted += cfg.CommandExecutedAsync;
 
             
             var token = "ODIyOTgzMzU4OTc1NzA1MTE5.YFaM-w.17obPN8rc60gALJ4jflslCp4cnk";

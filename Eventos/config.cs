@@ -10,6 +10,7 @@ namespace Discord.app.config
 {
     public class Config : Program
     {
+        public CommandService _commands;
         public async Task Client_Ready()
         {
             await _client.SetGameAsync("WLS SERVER", type: ActivityType.Playing);

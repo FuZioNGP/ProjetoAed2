@@ -216,10 +216,11 @@ namespace Discord.app.AdminCommands
                     var username = Context.Guild.GetUser(name.Id);
                     //var username = await Context.Guild.GetUserAsync(name);
                     var roles = Context.Guild.Roles.FirstOrDefault(x => x.Name == "PLAYER");
-                    var role = Context.Guild.Roles.FirstOrDefault(x => x.Name == "Silenciado");
-                    
-                    await username.AddRoleAsync(role);
+                    var role = Context.Guild.Roles.FirstOrDefault(y => y.Name == "Silenciado");
+                    Console.WriteLine(role);
+                    Console.WriteLine(roles);
                     await username.RemoveRoleAsync(roles);
+                    await username.AddRoleAsync(role);
                     await Context.Message.DeleteAsync();
                     const int delay = 5000;
                     var m = await this.ReplyAsync($"{Context.User.Mention}, usuario  {name} mutado com suceso! :white_check_mark: ");
@@ -281,19 +282,9 @@ namespace Discord.app.AdminCommands
                     await username.RemoveRoleAsync(role);
                     await Context.Message.DeleteAsync();
                     const int delay = 5000;
-                    var m = await this.ReplyAsync($"{Context.User.Mention}, usuario  {name} mutado com suceso! :white_check_mark: ");
+                    var m = await this.ReplyAsync($"{Context.User.Mention}, usuario  {name} desmutado com suceso! :white_check_mark: ");
                     await Task.Delay(delay);
                     await m.DeleteAsync();
-                    EmbedBuilder bd = new EmbedBuilder();
-                    var canalTribunal = Context.Guild.GetTextChannel(921024159360905266);
-                    bd.WithAuthor($"Mutado por   : {Context.Message.Author}");
-                    bd.WithTitle($":x: {username.Username} foi mutado!");
-                    bd.WithColor(139, 0, 139);
-                    bd.WithThumbnailUrl($"{username.GetAvatarUrl(size: 2048)}");
-                    bd.WithDescription($"***Motivo***``` {motivo} ```\n" +
-                        $"***ID*** : ```{username.Id}``` ");
-
-                    await canalTribunal.SendMessageAsync("", false, bd.Build());
 
                 }
                 catch (Exception ex)
