@@ -1,14 +1,13 @@
 ﻿using Discord.Commands;
+using Discord.WebSocket;
 using System;
+using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using System.Collections.Generic;
-
 
 namespace Discord.app.Comandos
 {
-    // for commands to be available, and have the Context passed to them, we must inherit ModuleBase
-    public class PlayersCommands : ModuleBase
+    public class PlayersCommands : ModuleBase<SocketCommandContext>
     {
 
         [Command("say")]
@@ -19,17 +18,13 @@ namespace Discord.app.Comandos
         [Command("hello")]
         public async Task HelloCommand()
         {
-            // initialize empty string builder for reply
             var sb = new StringBuilder();
 
-            // get user info from the Context
             var user = Context.User;
 
-            // build out the reply
             sb.AppendLine($"Seu nick é -> " + user);
             sb.AppendLine("Seja muito bem vindo!");
 
-            // send simple string reply
             await ReplyAsync(sb.ToString());
         }
 
@@ -37,47 +32,37 @@ namespace Discord.app.Comandos
         [Alias("ask")]
         public async Task AskEightBall([Remainder] string args = null)
         {
-            // I like using StringBuilder to build out the reply
             var sb = new StringBuilder();
-            // let's use an embed for this one!
+
             var embed = new EmbedBuilder();
 
-            // now to create a list of possible replies
             var replies = new List<string>();
 
-            // add our possible replies
             replies.Add("sim");
             replies.Add("não");
             replies.Add("obvio");
             replies.Add("talvez....");
 
-            // time to add some options to the embed (like color and title)
+
             embed.WithColor(new Color(0, 255, 0));
             embed.Title = "Bem vindo ao Pergunte para o BOT!";
 
-            // we can get lots of information from the Context that is passed into the commands
-            // here I'm setting up the preface with the user's name and a comma
             sb.AppendLine($"");
             sb.AppendLine();
 
-            // let's make sure the supplied question isn't null 
             if (args == null)
             {
-                // if no question is asked (args are null), reply with the below text
                 sb.AppendLine("Desculpe mas você não fez uma pergunta!");
             }
             else
             {
-                // if we have a question, let's give an answer!
-                // get a random number to index our list with (arrays start at zero so we subtract 1 from the count)
                 var answer = replies[new Random().Next(replies.Count - 1)];
 
-                // build out our reply with the handy StringBuilder
                 sb.AppendLine($"Você perguntou: " + args);
                 sb.AppendLine();
                 sb.AppendLine($"resposta: "+ answer);
 
-                // bonus - let's switch out the reply and change the color based on it
+
                 switch (answer)
                 {
                     case "sim":
@@ -103,11 +88,148 @@ namespace Discord.app.Comandos
                 }
             }
 
-            // now we can assign the description of the embed to the contents of the StringBuilder we created
+
             embed.Description = sb.ToString();
 
-            // this will reply with the embed
             await ReplyAsync(null, false, embed.Build());
+        }
+
+        [Command("servidor")]
+        public async Task sobreServer()
+        {
+            var sb = new StringBuilder();
+            var users = Context.Guild.Users;
+
+            sb.AppendLine($"Membros: ```{users.ToString()}```");
+            sb.AppendLine($"Status Bot: ```{Context.Client.ConnectionState}```");
+            sb.AppendLine($"Usuários Online: ```0```");
+
+            var bd = new EmbedBuilder
+            {
+                Title = $"sobre servidor : {Context.Guild.Name}",
+                Description = sb.ToString()
+            };
+
+            bd.WithColor(Color.Blue);
+
+
+
+            await Context.Message.DeleteAsync();
+            await ReplyAsync("", false, bd.Build());
+        }
+        [Command("ajuda")]
+        public async Task CommandsList()
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine($"Olá {Context.User.Mention} :smile: , meu nome é {Context.Client.CurrentUser} sou responsável por cuidar do servidor, estou sempre ligado o que ja por dentro, " +
+                $"minha função é manter vocês interagidos com minhas funcionalidades de interação e é claro, moderação, estarei te notificando de promoções ativas, de novos eventos que vão ocorrer" +
+                $"então chega de enrolação e vamos aos comandos :smile:");
+            sb.AppendLine("Comandos de Interação: \n" +
+                "***piada*** \n" +
+                "```quer dar gargalhadas?! então faça eu contar uma dois 8 piadas que tenho aqui armazenado, lembrando que não prometo que todos são do seu gosto em. ``` \n" +
+                "***perfil*** \n ``` visualizar seu perfil. ```\n" +
+                "***avatar <name>*** \n ```Amplie a imagem do seu amigo``` \n");
+            sb.AppendLine("Comando Info \n ***sobre*** \n ```Conto um pouco sobre mim hihi e como fui criado.``` \n" +
+                "***servidor*** ```puxe informações gerais do servidor.```");
+
+            var bd = new EmbedBuilder
+            {
+                Title = $"Lista de comandos",
+                Description = sb.ToString()
+            };
+            
+            var usuario = Context.User;
+            bd.WithTitle("Lista de comandos");
+            bd.WithImageUrl("https://i.imgur.com/gR5PWin.png");
+            bd.WithColor(Color.Blue);
+
+
+            await ReplyAsync("", false, bd.Build());
+        }
+        [Command("piada")]
+        public async Task contaPiada()
+        {
+
+            ulong ids = Context.Channel.Id;
+            switch (ids)
+            {
+                case 822905099911299103: piadas(); break;
+                case 823190100258717736: piadas(); break;
+                default:
+                    await Context.Message.DeleteAsync();
+                    const int delay = 5000;
+                    var m = await this.ReplyAsync($"{Context.User.Mention},:x: Opa! você não pode executar este comando aqui, por favor execute no Chat comandos. :smile: ");
+                    await Task.Delay(delay);
+                    await m.DeleteAsync(); break;
+            }
+
+
+
+
+        }
+        public async void piadas()
+        {
+            Random rdn = new Random();
+
+            int random = rdn.Next(0, 8);
+            switch (random)
+            {
+                case 0:
+                    await ReplyAsync("O que tem quatro patas e um braço? \n – Um pit - bull feliz. ?????? ");
+                    break;
+                case 1:
+                    await ReplyAsync("O que um tijolo falou pro outro? \n – Há um ciumento entre nos. ? ");
+                    break;
+                case 2:
+                    await ReplyAsync("O sujeito chegou naquela cidade e ficou sabendo que o José queria vender um burrinho. Achando o bichinho muito simpático, ele perguntou: - Qual é o nome dele? - Num sei, não... - Como não sabe? O bicho não é seu? E o caipira: - Só qui eu num sei qual é o nome dele... eu chamo ele de Zeca, sô.");
+                    break;
+                case 3:
+                    await ReplyAsync("Por que o Manoel ficou duas horas olhando fixamente pra lata de suco de laranja? \n – Porque estava escrito “concentrado”. ?????? ");
+                    break;
+                case 4:
+                    await ReplyAsync("Qual e a parte do corpo da mulher que cheira bacalhau? \n - O nariz. ??? ");
+                    break;
+                case 5: await ReplyAsync("Sabe por que o italiano não come churrasco? \n– Porque o macarrão não cabe no espeto. ?? "); break;
+
+                case 6:
+                    await ReplyAsync("A mãe pergunta ao Joãozinho: “Joãozinho, porque é que já não passas tempo com o teu amigo Marco?”\n" +
+                "Joãozinho: “Mãe, tu gostas de passar tempo com alguém que fume, beba e diga palavrões?”\n" +
+                "Mãe: “Claro que não, Joãozinho!”\n" +
+                "Joãozinho: “Pois, o Marco também não gosta.” ????");
+                    break;
+                case 7: await ReplyAsync("O garoto apanhou da vizinha, e a mãe furiosa foi tomar satisfação: Por que a senhora bateu no meu filho? Ele foi mal-educado, e me chamou de gorda. E a senhora acha que vai emagrecer batendo nele?"); break;
+
+                case 8: await ReplyAsync("Um advogado e sua sogra estão em um edifício em chamas. Você só tem tempo pra salvar um dos dois. O que você faz? Você vai almoçar ou vai ao cinema?"); break;
+
+            }
+        }
+
+        [Command("avatar")]
+        public async Task eduardo(SocketUser user)
+        {
+
+            try
+            {
+                var usuario = Context.User;
+                EmbedBuilder builds = new EmbedBuilder();
+                builds.WithTitle(":camera_with_flash:Abrir a foto em uma nova guia");
+                builds.WithColor(139, 0, 139);
+                builds.WithAuthor($"Foto de {usuario.Username}");
+                builds.WithUrl($"{usuario.GetAvatarUrl(size: 2048)}");
+                builds.WithImageUrl($"{usuario.GetAvatarUrl(size: 2048)}");
+
+                await ReplyAsync("", false, builds.Build());
+            }
+            catch (Exception ex)
+            {
+
+                await Context.Message.DeleteAsync();
+                const int delay = 5000;
+                var m = await this.ReplyAsync($"{Context.User.Mention}, Hmmmm :frowning:, houve algum erro ao encontrar este usuário, tente pegar pelo id dele :smile: ");
+                await Task.Delay(delay);
+                await m.DeleteAsync();
+                Console.WriteLine(ex);
+            }
         }
     }
 }
