@@ -45,8 +45,6 @@ namespace Discord.app.AdminCommands
 
         }
         [Command("ban")]
-        [RequireUserPermission(GuildPermission.ManageMessages)]
-        [RequireBotPermission(ChannelPermission.ManageMessages)]
         public async Task banirUser(SocketGuildUser name, [Remainder] string rz = "não específicado")
         {
             var User = Context.User as SocketGuildUser;
@@ -121,13 +119,11 @@ namespace Discord.app.AdminCommands
             else
             {
                 var sb = new StringBuilder();
-                sb.AppendLine($"{User.Mention} você não é administrado e não pode executar este comando!r");
+                sb.AppendLine($"{User.Mention} você não é administrador e não pode executar este comando!");
                 await ReplyAsync(sb.ToString());
             }
         }
         [Command("kick")]
-        [RequireUserPermission(GuildPermission.ManageMessages)]
-        [RequireBotPermission(ChannelPermission.ManageMessages)]
         public async Task kickUsuario(SocketGuildUser username, [Remainder] string razao = "motivo não específicado")
         {
             var User = Context.User as SocketGuildUser;
@@ -195,14 +191,11 @@ namespace Discord.app.AdminCommands
             else
             {
                 var sb = new StringBuilder();
-                sb.AppendLine($"{User.Mention} você não é administrado e não pode executar este comando!r");
+                sb.AppendLine($"{User.Mention} você não é administrador e não pode executar este comando!");
                 await ReplyAsync(sb.ToString());
             }
         }
         [Command("mutar")]
-        [RequireUserPermission(GuildPermission.ManageMessages)]
-        [RequireBotPermission(ChannelPermission.ManageMessages)]
-        [RequireBotPermission(GuildPermission.ManageRoles)]
         public async Task mutar(SocketGuildUser name, [Remainder] string motivo = "nenhum motivo")
         {
             var User = Context.User as SocketGuildUser;
@@ -253,15 +246,12 @@ namespace Discord.app.AdminCommands
             else
             {
                 var sb = new StringBuilder();
-                sb.AppendLine($"{User.Mention} você não é administrado e não pode executar este comando!r");
+                sb.AppendLine($"{User.Mention} você não é administrador e não pode executar este comando!");
                 await ReplyAsync(sb.ToString());
             }
         }
 
         [Command("desmutar")]
-        [RequireUserPermission(GuildPermission.ManageMessages)]
-        [RequireBotPermission(ChannelPermission.ManageMessages)]
-        [RequireBotPermission(GuildPermission.ManageRoles)]
         public async Task desmutar(SocketGuildUser name, [Remainder] string motivo = "nenhum motivo")
         {
             var User = Context.User as SocketGuildUser;
@@ -302,7 +292,7 @@ namespace Discord.app.AdminCommands
             else
             {
                 var sb = new StringBuilder();
-                sb.AppendLine($"{User.Mention} você não é administrado e não pode executar este comando!r");
+                sb.AppendLine($"{User.Mention} você não é administrador e não pode executar este comando!");
                 await ReplyAsync(sb.ToString());
             }
         }
