@@ -10,10 +10,9 @@ namespace Discord.app
 {
 	public class Program
     {
-        public DiscordSocketClient _client;
-        public CommandService _commands;
-        Config cfg = new Config();
-        EntrouSaiu join = new EntrouSaiu();
+        public static DiscordSocketClient _client;
+        public static CommandService _commands;
+
 
         private Task Log(LogMessage msg)
 		{
@@ -24,8 +23,12 @@ namespace Discord.app
 
         public async Task MainAsync()
 		{
+
             _client = new DiscordSocketClient();
             _commands = new CommandService();
+
+            Config cfg = new Config();
+            EntrouSaiu join = new EntrouSaiu();
 
             await cfg.Client_Ready();
             await cfg.InstallCommandsAsync();
