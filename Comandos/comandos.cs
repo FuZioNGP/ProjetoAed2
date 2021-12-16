@@ -2,6 +2,7 @@
 using Discord.WebSocket;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -10,7 +11,7 @@ namespace Discord.app.Comandos
     public class PlayersCommands : ModuleBase<SocketCommandContext>
     {
 
-        [Command("say")]
+        /*[Command("say")]
         [Summary("Repete sua mensagem.")]
         public Task SayAsync([Remainder][Summary("O texto escrito é ")] string echo)
             => ReplyAsync(echo);
@@ -26,7 +27,7 @@ namespace Discord.app.Comandos
             sb.AppendLine("Seja muito bem vindo!");
 
             await ReplyAsync(sb.ToString());
-        }
+        }*/
 
         [Command("perguntar")]
         [Alias("ask")]
@@ -98,12 +99,25 @@ namespace Discord.app.Comandos
         public async Task sobreServer()
         {
             var sb = new StringBuilder();
-            var users = Context.Guild.Users;
+            var users = Context.Guild.Users.Count;
 
-            sb.AppendLine($"Membros: ```{users.ToString()}```");
+            IGuild guild = Context.Client.GetGuild(822875098843185182); //Put your discord server id
+            IGuildUser[] userson = guild.GetUsersAsync().Result.ToArray();
+            int totalUsers = userson.Where(userson => userson.IsBot == false).Count();
+            int online = 0;
+            int offline = 0;
+            int bots = 0;
+            foreach (IGuildUser user in userson)
+            {
+                if (user.IsBot) bots++;
+                else if (user.Status == UserStatus.Online) online++;
+                else if (user.Status == UserStatus.Offline) offline++;
+            }
+            sb.AppendLine($"Membros: ```{users}```");
             sb.AppendLine($"Status Bot: ```{Context.Client.ConnectionState}```");
-            sb.AppendLine($"Usuários Online: ```0```");
-
+            sb.AppendLine($"Bots no Servidor: ```{bots}```");
+            sb.AppendLine($"Usuários Online: ```{online}```");
+            sb.AppendLine($"Usuários Offline: ```{offline}```");
             var bd = new EmbedBuilder
             {
                 Title = $"sobre servidor : {Context.Guild.Name}",
@@ -127,9 +141,9 @@ namespace Discord.app.Comandos
             sb.AppendLine("Comandos de Interação: \n" +
                 "***piada*** \n" +
                 "```quer dar gargalhadas?! então faça eu contar uma dois 8 piadas que tenho aqui armazenado, lembrando que não prometo que todos são do seu gosto em. ``` \n" +
-                "***perfil*** \n ``` visualizar seu perfil. ```\n" +
+                "***Perguntar <pergunta>*** \n ``` Pergunte algo para o bot e ele irá te responder (sim, não, óbvio ou talves) ```\n" +
                 "***avatar <name>*** \n ```Amplie a imagem do seu amigo``` \n");
-            sb.AppendLine("Comando Info \n ***sobre*** \n ```Conto um pouco sobre mim hihi e como fui criado.``` \n" +
+            sb.AppendLine("Comando Info \n" +
                 "***servidor*** ```puxe informações gerais do servidor.```");
 
             var bd = new EmbedBuilder

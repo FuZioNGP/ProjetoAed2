@@ -33,6 +33,7 @@ namespace Discord.app
             await cfg.Client_Ready();
             await cfg.InstallCommandsAsync();
 
+            
             _client.Log += Log;
             _client.UserJoined += join.AnnounceJoinedUser;
             //_client.UserBanned += AnnounceBannedUser;
@@ -40,7 +41,7 @@ namespace Discord.app
             _commands.CommandExecuted += cfg.CommandExecutedAsync;
 
             
-            var token = "ODIyOTgzMzU4OTc1NzA1MTE5.YFaM-w.45Iu9UOrpuu45b9Bn6xPH_bQoys";
+            var token = "ODIyOTgzMzU4OTc1NzA1MTE5.YFaM-w.17obPN8rc60gALJ4jflslCp4cnk";
             await _client.LoginAsync(TokenType.Bot, token);
             await _client.StartAsync();
                
